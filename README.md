@@ -23,7 +23,7 @@ bin/watch_viadeo
 You should consider forking this. The first thing you should do is to tweak it to use a better authentication method.
  
  
-TO DO
+To Do
 -----
 
 * Support more authentication methods out of the box
