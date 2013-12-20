@@ -1,0 +1,14 @@
+# reject OS X specific files
+*.DS_Store
+
+# Editor backup files
+.*~
+# vim backup files
+.*.swp
+
+# ignore .directory-files
+.directory
+*/.directory
+
+tmp/
+.bundle
