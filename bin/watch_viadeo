@@ -16,9 +16,8 @@ viadeo = Buzz::GitHub::OrgEvents.new('viadeo', octokit)
 tijn = Buzz::GitHub::UserEvents.new('tijn', octokit)
 
 while true
-  puts "=" * 80
   (viadeo.events + tijn.events).each do |event|
     puts "* #{EventPrinter.event_to_s(event)}"
   end
-  sleep 10
+  sleep 20
 end
