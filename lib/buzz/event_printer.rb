@@ -93,12 +93,7 @@ class EventPrinter
   end
 
   def fetch(*paths)
-    result = @event
-    last = paths.pop
-    paths.each do |path|
-      result = result[path] || {}
-    end
-    result[last]
+    fetch_from_hash(@event, *paths)
   end
 
   def fetch_from_hash(hash, *paths)
