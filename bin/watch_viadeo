@@ -16,8 +16,10 @@ viadeo = Buzz::GitHub::OrgEvents.new('viadeo', octokit)
 tijn = Buzz::GitHub::UserEvents.new('tijn', octokit)
 
 while true
-  (viadeo.events + tijn.events).each do |event|
-    puts "* #{EventPrinter.event_to_s(event)}"
+  all_events = (viadeo.events + tijn.events)
+  all_events.sort_by! { |event| event['id'] }
+  all_events.each do |event|
+    puts "* #{event['created_at']} - #{EventPrinter.event_to_s(event)}"
   end
   sleep 20
 end
