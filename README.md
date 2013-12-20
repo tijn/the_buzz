@@ -1,4 +1,4 @@
-the_buzz
+The Buzz
 ========
 
-Telling you what's up
+What's the buzz?
