@@ -6,6 +6,8 @@ What's the buzz?
 'sup?
 -----
 
+Console output only for now.
+
 ```
 git clone <this_repo>
 cd <the_buzz_directory>
@@ -21,3 +23,8 @@ bin/watch_viadeo
 You should consider forking this. The first thing you should do is to tweak it to use a better authentication method.
  
  
+TO DO
+-----
+
+* Support more authentication methods out of the box
+* HTML output
