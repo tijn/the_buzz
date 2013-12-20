@@ -13,7 +13,10 @@ class EventPrinter
 
   def to_s
     case @event['type']
-    # when 'CommitCommentEvent'
+
+    when 'CommitCommentEvent'
+      "#{actor_name} commented on a commit"
+
     when 'CreateEvent'
       case ref_type
       when "branch"
@@ -26,20 +29,26 @@ class EventPrinter
         "#{actor_name} created a new #{ref_type}"
       end
 
-    # when 'DeleteEvent'
+    when 'DeleteEvent'
+      "#{actor_name} deleted a tag or a branch. Thank you for keeping our repository clean #{actor_name}!"
 
     # when 'DownloadEvent'
+      # doesn't apply anymore
 
-    # when 'FollowEvent'
+    when 'FollowEvent'
+      "#{actor_name} started following #{payload['target']['name']}"
 
     when 'ForkEvent'
       "#{actor_name} forked #{repo_name}"
 
     # when 'ForkApplyEvent'
+      # doesn't apply anymore
 
     # when 'GistEvent'
+      # doesn't apply anymore
 
-    # when 'GollumEvent'
+    when 'GollumEvent'
+      "#{actor_name} worked on a wiki-page"
 
     when 'IssueCommentEvent'
       "#{actor_name} commented on issue #{issue} on #{repo_name}"
@@ -47,9 +56,11 @@ class EventPrinter
     when 'IssuesEvent'
       "#{actor_name} #{action} issue #{issue} on #{repo_name}"
 
-    # when 'MemberEvent'
+    when 'MemberEvent'
+      "#{member_name} became a collaborator on #{repo_name}"
 
-    # when 'PublicEvent'
+    when 'PublicEvent'
+      "#{actor_name} open sourced #{repo_name}. Awesome!"
 
     when 'PullRequestEvent'
       "#{actor_name} #{action} a pull request"
@@ -61,18 +72,28 @@ class EventPrinter
       "#{actor_name} pushed to #{repo_name}"
       # TODO: show commits
 
-    # when 'ReleaseEvent'
+    when 'ReleaseEvent'
+      "#{actor_name} released #{repo_name}: #{release_name}. Yeah! High five!"
 
     # when 'StatusEvent'
+      # ?
+      # I don't get this event
 
-    # when 'TeamAddEvent'
+    when 'TeamAddEvent'
+      # boh, not too interesting, is it?
+      ""
 
-    # when 'WatchEvent'
+    when 'WatchEvent'
+      "#{actor_name} started watching #{repo_name}"
 
     else
       @event.type.to_s
       # raise "I don't support #{@event.type} yet"
     end
+  end
+
+  def payload
+    @event.fetch('payload', {})
   end
 
   def actor_name
@@ -81,6 +102,10 @@ class EventPrinter
 
   def repo_name
     @event['repo']['name']
+  end
+
+  def release_name
+    @event['repo']['release']['name']
   end
 
   def action
@@ -95,6 +120,9 @@ class EventPrinter
     @event['payload']['ref']
   end
 
+  def member_name
+    @event['payload']['member']['name']
+  end
 
   def issue
     "\##{issue_number} \"#{issue_text}\""
