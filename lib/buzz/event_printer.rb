@@ -138,14 +138,14 @@ class EventPrinter
   end
 
   def issue
-    "\##{issue_number} \"#{issue_text}\""
+    "\##{issue_number} \"#{issue_title}\""
   end
 
   def issue_number
     fetch 'payload', 'issue', 'number'
   end
 
-  def issue_text
+  def issue_title
     fetch 'payload', 'issue', 'title'
   end
 
