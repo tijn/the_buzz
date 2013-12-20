@@ -7,6 +7,8 @@ Bundler.require
 require 'buzz'
 
 # we will share the same octokit for two "clients"
+
+# see https://github.com/octokit/octokit.rb#using-a-netrc-file
 octokit = Octokit::Client.new :netrc => true
 octokit.login
 
