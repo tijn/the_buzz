@@ -12,11 +12,14 @@ octokit.login
 
 viadeo = Buzz::GitHub::OrgEvents.new('viadeo', octokit)
 
+latest_event_id = 0
 while true
   current_events = viadeo.events
+  current_events.select! { |event| event['id'].to_i > latest_event_id }
   current_events.sort_by! { |event| event['id'] }
   current_events.each do |event|
     puts "* #{event['created_at']} - #{EventPrinter.event_to_s(event)}"
+    latest_event_id = event['id'].to_i
   end
   sleep 20
 end
