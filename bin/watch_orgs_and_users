@@ -6,17 +6,22 @@ Bundler.require
 
 require 'buzz'
 
+# we will share the same octokit for multiple "clients"
+
 # see https://github.com/octokit/octokit.rb#using-a-netrc-file
 octokit = Octokit::Client.new :netrc => true
 octokit.login
 
 viadeo = Buzz::GitHub::OrgEvents.new('viadeo', octokit)
+tijn = Buzz::GitHub::UserEvents.new('tijn', octokit)
+eugene = Buzz::GitHub::UserEvents.new('libc', octokit)
+linus = Buzz::GitHub::UserEvents.new('torvalds', octokit)
 
 while true
-  current_events = viadeo.events
+  current_events = (viadeo.events + tijn.events + eugene.events + linus.events)
   current_events.sort_by! { |event| event['id'] }
   current_events.each do |event|
     puts "* #{event['created_at']} - #{EventPrinter.event_to_s(event)}"
   end
-  sleep 20
+  sleep 60
 end
