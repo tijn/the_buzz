@@ -51,9 +51,11 @@ class EventPrinter
 
     # when 'PublicEvent'
 
-    # when 'PullRequestEvent'
+    when 'PullRequestEvent'
+      "#{actor_name} #{action} a pull request"
 
-    # when 'PullRequestReviewCommentEvent'
+    when 'PullRequestReviewCommentEvent'
+      "#{actor_name} commented on a pull request"
 
     when 'PushEvent'
       "#{actor_name} pushed to #{repo_name}"
