@@ -69,8 +69,8 @@ class EventPrinter
       "#{actor_name} commented on a pull request"
 
     when 'PushEvent'
-      "#{actor_name} pushed to #{repo_name}"
-      # TODO: show commits
+      "#{actor_name} pushed to #{repo_name}\n" +
+      commits.map { |commit| "\t- #{commit_to_s(commit)}" }.join("\n")
 
     when 'ReleaseEvent'
       "#{actor_name} released #{repo_name}: #{release_name}. Yeah! High five!"
@@ -94,6 +94,15 @@ class EventPrinter
 
   def fetch(*paths)
     result = @event
+    last = paths.pop
+    paths.each do |path|
+      result = result[path] || {}
+    end
+    result[last]
+  end
+
+  def fetch_from_hash(hash, *paths)
+    result = hash
     last = paths.pop
     paths.each do |path|
       result = result[path] || {}
@@ -143,5 +152,15 @@ class EventPrinter
 
   def issue_text
     fetch 'payload', 'issue', 'title'
+  end
+
+  def commits
+    fetch 'payload', 'commits'
+  end
+
+  def commit_to_s(commit)
+    author = fetch_from_hash(commit, 'author', 'name')
+    message = fetch_from_hash(commit, 'message').split("\n").first
+    "#{author}: #{message}"
   end
 end
