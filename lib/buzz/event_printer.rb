@@ -92,36 +92,45 @@ class EventPrinter
     end
   end
 
+  def fetch(*paths)
+    result = @event
+    last = paths.pop
+    paths.each do |path|
+      result = result[path] || {}
+    end
+    result[last]
+  end
+
   def payload
-    @event.fetch('payload', {})
+    @event['payload']
   end
 
   def actor_name
-    @event['actor']['login']
+    fetch 'actor', 'login'
   end
 
   def repo_name
-    @event['repo']['name']
+    fetch 'repo', 'name'
   end
 
   def release_name
-    @event['repo']['release']['name']
+    fetch 'repo', 'release', 'name'
   end
 
   def action
-    @event['payload']['action']
+    fetch 'payload', 'action'
   end
 
   def ref_type
-    @event['payload']['ref_type']
+    fetch 'payload', 'ref_type'
   end
 
   def ref
-    @event['payload']['ref']
+    fetch 'payload', 'ref'
   end
 
   def member_name
-    @event['payload']['member']['name']
+    fetch 'payload', 'member', 'name'
   end
 
   def issue
@@ -129,10 +138,10 @@ class EventPrinter
   end
 
   def issue_number
-    @event['payload']['issue']['number']
+    fetch 'payload', 'issue', 'number'
   end
 
   def issue_text
-    @event['payload']['issue']['title']
+    fetch 'payload', 'issue', 'title'
   end
 end
