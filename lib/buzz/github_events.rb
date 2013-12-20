@@ -45,7 +45,7 @@ module Buzz
       def organization_events
         events = @octokit.organization_events(@organization, headers)
         save_etag
-        events
+        events || []
       end
       alias_method :events, :organization_events
     end
@@ -60,7 +60,7 @@ module Buzz
       def user_events
         events = @octokit.user_events(@username, headers)
         save_etag
-        events
+        events || []
       end
       alias_method :events, :user_events
     end
