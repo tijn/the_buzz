@@ -20,6 +20,16 @@ module Buzz
         end
       end
 
+      def grab_events
+        raise NotImplementedError, 'This is the responsibility of a subclass'
+      end
+
+      def events
+        events = grab_events
+        save_etag
+        events || []
+      end
+
       def save_etag
         if @octokit.last_response.status == 200
           @etag = @octokit.last_response.headers['etag']
@@ -42,12 +52,10 @@ module Buzz
         @organization = organization
       end
 
-      def organization_events
-        events = @octokit.organization_events(@organization, headers)
-        save_etag
-        events || []
+      def grab_events
+        @octokit.organization_events(@organization, headers)
       end
-      alias_method :events, :organization_events
+      alias_method :organization_events, :events
     end
 
 
@@ -57,12 +65,12 @@ module Buzz
         @username = username
       end
 
-      def user_events
+      def grab_events
         events = @octokit.user_events(@username, headers)
         save_etag
         events || []
       end
-      alias_method :events, :user_events
+      alias_method :user_events, :events
     end
   end
 end
