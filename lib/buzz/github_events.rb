@@ -25,9 +25,9 @@ module Buzz
       end
 
       def events
-        events = grab_events
+        events = grab_events || []
         save_etag
-        events || []
+        events
       end
 
       def save_etag
@@ -45,8 +45,36 @@ module Buzz
       end
     end
 
+    # make sure not to return events that we've already seen
+    class UniqueEvents < Events
+      def events
+        remove_old_events(super)
+      end
 
-    class OrgEvents < Events
+      def remove_old_events(events)
+        events = reject_old_events(events)
+        save_last_id(events)
+      end
+
+      def save_last_id(events)
+        events.sort_by! { |event| event['id'].to_i }
+        if last = events.last
+          @last_id_seen = last['id'].to_i
+        end
+        events
+      end
+
+      def reject_old_events(events)
+        return events if @last_id_seen.nil?
+
+        events.reject do |event|
+          event['id'].to_i < @last_id_seen
+        end
+      end
+    end
+
+
+    class OrgEvents < UniqueEvents
       def initialize(organization, octokit = mil)
         set_octokit(octokit)
         @organization = organization
@@ -59,7 +87,7 @@ module Buzz
     end
 
 
-    class UserEvents < Events
+    class UserEvents < UniqueEvents
       def initialize(username, octokit = mil)
         set_octokit(octokit)
         @username = username

@@ -17,14 +17,11 @@ tijn = Buzz::GitHub::UserEvents.new('tijn', octokit)
 eugene = Buzz::GitHub::UserEvents.new('libc', octokit)
 linus = Buzz::GitHub::UserEvents.new('torvalds', octokit)
 
-latest_event_id = 0
 while true
   current_events = (viadeo.events + tijn.events + eugene.events + linus.events)
-  current_events.select! { |event| event['id'].to_i > latest_event_id }
   current_events.sort_by! { |event| event['id'].to_i }
   current_events.each do |event|
     puts "* #{event['created_at']} - #{EventPrinter.event_to_s(event)}"
-    latest_event_id = event['id'].to_i
   end
   sleep 60
 end
