@@ -3,6 +3,8 @@ The Buzz
 
 What's the buzz?
 
+The goal of this project is having a [Dashing](http://shopify.github.io/dashing/) widget that can show a timeline of the current events of watched projects (and whole organizations) on GitHub.
+
 'sup?
 -----
 
