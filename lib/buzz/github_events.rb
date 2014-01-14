@@ -11,11 +11,11 @@ module Buzz
         raise "This is a base class; please don't try to instantiate it."
       end
 
-      def set_octokit(octokit = mil)
+      def set_octokit(octokit = nil)
         if octokit
           @octokit = octokit
         else
-          @octokit = Octokit::Client.new :netrc => true
+          @octokit = Octokit::Client.new(:netrc => true)
           @octokit.login
         end
       end
@@ -44,6 +44,7 @@ module Buzz
         end
       end
     end
+
 
     # make sure not to return events that we've already seen
     class UniqueEvents < Events
@@ -75,7 +76,7 @@ module Buzz
 
 
     class OrgEvents < UniqueEvents
-      def initialize(organization, octokit = mil)
+      def initialize(organization, octokit = nil)
         set_octokit(octokit)
         @organization = organization
       end
@@ -88,7 +89,7 @@ module Buzz
 
 
     class UserEvents < UniqueEvents
-      def initialize(username, octokit = mil)
+      def initialize(username, octokit = nil)
         set_octokit(octokit)
         @username = username
       end
