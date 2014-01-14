@@ -1,6 +1,19 @@
 require "spec_helper"
 
 
+describe Buzz::GitHub::OrgEvents do
+  context "just one peek at the current state of affairs" do
+    let(:github)  { Buzz::GitHub::UserEvents.new('github') }
+
+    it "should find the latest commits" do
+      VCR.use_cassette('github') do
+        github.events.should_not be_empty
+      end
+    end
+  end
+end
+
+
 describe Buzz::GitHub::UserEvents do
 
   context "just one peek at the current state of affairs" do
